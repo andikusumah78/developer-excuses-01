@@ -26,6 +26,9 @@ LINE = (
     "only reviewer who actually ran it."
 )
 
+# The gate allows 1 to 200 characters of UTF-8 text, a single line.
+MAX_CHARS = 200
+
 
 def output_path() -> str:
     directory = os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output"
@@ -34,8 +37,8 @@ def output_path() -> str:
 
 def main() -> None:
     line = LINE
-    if not 1 <= len(line) <= 200 or not line.strip():
-        raise SystemExit("entry must be 1 to 200 characters of text")
+    if not 1 <= len(line) <= MAX_CHARS or "\n" in line or not line.strip():
+        raise SystemExit("entry must be one line of 1 to 200 characters of text")
     path = output_path()
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="") as handle:
